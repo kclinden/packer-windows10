@@ -1,0 +1,47 @@
+{
+  "builders": [
+    {
+      "type": "vsphere-iso",
+      "vcenter_server": "{{user `vcHostname`}}",
+      "username": "{{user `vcUsername`}}",
+      "password": "{{user `vcPassword`}}",
+      "insecure_connection": "true",
+
+      "vm_name": "test-windows",
+      "CPUs": 1,
+      "RAM": 4096,
+      "guest_os_type": "windows9_64Guest",
+      "datastore": "{{user `datastore`}}",
+      "create_snapshot": "false",
+      "cluster": "{{user `cluster`}}",
+      "network": "{{user `network`}}",
+      "boot_order": "disk,cdrom",
+      "RAM_reserve_all": false,
+      "disk_controller_type": "pvscsi",
+      "disk_size": 32768,
+      "disk_thin_provisioned": true,
+      "network_card": "vmxnet3",
+
+      "communicator": "winrm",
+      "winrm_username": "{{user `winrmUsername`}}",
+      "winrm_password": "{{user `winrmPassword`}}",
+
+      "iso_paths": [
+        "{{user `datastore_iso`}} Microsoft/en_windows_10_multiple_editions_version_1607_updated_jul_2016_x64_dvd_9058187.iso",
+        "{{user `datastore_iso`}} vmtools/vmtools/windows.iso"
+      ],
+      "floppy_files": [
+        "{{template_dir}}/setup/"
+      ],
+      "floppy_img_path": "{{user `datastore_iso`}} vmtools/floppies/pvscsi-Windows8.flp"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "windows-shell",
+      "inline": [
+        "dir c:\\"
+      ]
+    }
+  ]
+}
